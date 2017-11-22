@@ -104,6 +104,7 @@ print(away_team + ": " + str(away_team_id) +"\n")
 match = pd.read_sql_query("select * from Match where home_team_api_id = "+ str(home_team_id) + " and away_team_api_id = "+ str(away_team_id)\
 	+ " and season = '2015/2016'", conn)
 match_round = match['stage'][0]
+match_year = str(match['date'][0][:4])
 
 # Step 3: Get team stats until that round
 getTeamStats(1, match_round)
@@ -113,7 +114,32 @@ getTeamStats(1, match_round)
 
 getTeamStats(match_round-7, match_round)
 
-#############################
-# Attack/Defense efficiency #
-#############################
+#######################################################
+## Attack/Defense efficiency - Function getTeamStats ##
+#######################################################
 
+###############################
+# Line-ups and Rating Average #
+###############################
+
+home_lineup = []
+away_lineup = []
+home_rating_sum = 0
+away_rating_sum = 0
+
+for i in range(1, 12):
+	home_player = pd.read_sql_query("select player_name from Player where player_api_id = "+ str(match['home_player_'+str(i)][0]), conn)
+	home_player_rating = pd.read_sql_query("select overall_rating from Player_Attributes where player_api_id = " + str(match['home_player_'+str(i)][0]) + " and date like '"+ match_year +"%'", conn)
+	away_player = pd.read_sql_query("select player_name from Player where player_api_id = "+ str(match['away_player_'+str(i)][0]), conn)
+	away_player_rating = pd.read_sql_query("select overall_rating from Player_Attributes where player_api_id = " + str(match['away_player_'+str(i)][0]) + " and date like '"+ match_year +"%'", conn)
+	home_lineup.append([home_player['player_name'][0], home_player_rating['overall_rating'][0]])
+	home_rating_sum += home_player_rating['overall_rating'][0]
+	away_lineup.append([away_player['player_name'][0], away_player_rating['overall_rating'][0]])
+	away_rating_sum += away_player_rating['overall_rating'][0]
+
+print(home_team + " lineup: " + str(home_lineup))
+print(away_team + " lineup: " + str(away_lineup))
+
+print("Overall Rating")
+print(home_team + ": " + str(home_rating_sum/11))
+print(away_team + ": " + str(away_rating_sum/11))
