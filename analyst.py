@@ -2,6 +2,7 @@
 import sys
 import pandas as pd
 import sqlite3
+import xml.etree.ElementTree as ET
 
 conn = sqlite3.connect('database.sqlite')
 
@@ -11,7 +12,17 @@ if len(sys.argv) < 3:
 else:
 	home_team, away_team = sys.argv[1], sys.argv[2]
 
+# Variable Initialization
+home_lineup = []
+away_lineup = []
+home_scorers = []
+away_scorers = []
+home_rating_sum = 0
+away_rating_sum = 0
+
 # Useful functions
+
+# Get team stats up to stage/round prior to the match
 
 def getTeamStats(initial_stage, final_stage):
 	matches_before_round = pd.read_sql_query("select * from Match where country_id = 1729 and league_id = 1729 and season = '2015/2016' and stage >= "+ str(initial_stage) +" and stage < "+ str(final_stage), conn)
@@ -74,14 +85,14 @@ def getTeamStats(initial_stage, final_stage):
 	print("Wins: " + str(home_stats['home_wins']))
 	print("Draws: " + str(home_stats['home_draws']))
 	print("Losses: " + str(home_stats['home_losses']))
-	print("Points: " + str(home_points) + "\n")
+	print("Points: " + str(home_points))
 	print("Goals scored: " + str(home_stats['home_goals_scored']))
 	print("Goals conceded: " + str(home_stats['home_goals_conceded']) + "\n")
 	print(away_team + " stats:")
 	print("Wins: " + str(away_stats['away_wins']))
 	print("Draws: " + str(away_stats['away_draws']))
 	print("Losses: " + str(away_stats['away_losses']))
-	print("Points: " + str(away_points) + "\n")
+	print("Points: " + str(away_points))
 	print("Goals scored: " + str(away_stats['away_goals_scored']))
 	print("Goals conceded: " + str(away_stats['away_goals_conceded']) + "\n")
 
@@ -122,24 +133,43 @@ getTeamStats(match_round-7, match_round)
 # Line-ups and Rating Average #
 ###############################
 
-home_lineup = []
-away_lineup = []
-home_rating_sum = 0
-away_rating_sum = 0
-
 for i in range(1, 12):
 	home_player = pd.read_sql_query("select player_name from Player where player_api_id = "+ str(match['home_player_'+str(i)][0]), conn)
 	home_player_rating = pd.read_sql_query("select overall_rating from Player_Attributes where player_api_id = " + str(match['home_player_'+str(i)][0]) + " and date like '"+ match_year +"%'", conn)
+	if len(home_player_rating) == 0: # If player rating from the year when the match was realized not exists, gets most recent
+		while len(home_player_rating) == 0:
+			match_year = str(int(match_year)-1)
+			home_player_rating = pd.read_sql_query("select overall_rating from Player_Attributes where player_api_id = " + str(match['home_player_'+str(i)][0]) + " and date like '"+ match_year +"%'", conn)
 	away_player = pd.read_sql_query("select player_name from Player where player_api_id = "+ str(match['away_player_'+str(i)][0]), conn)
 	away_player_rating = pd.read_sql_query("select overall_rating from Player_Attributes where player_api_id = " + str(match['away_player_'+str(i)][0]) + " and date like '"+ match_year +"%'", conn)
+	if len(away_player_rating) == 0:
+		while len(away_player_rating) == 0:
+			match_year = str(int(match_year)-1)
+			away_player_rating = pd.read_sql_query("select overall_rating from Player_Attributes where player_api_id = " + str(match['away_player_'+str(i)][0]) + " and date like '"+ match_year +"%'", conn)
 	home_lineup.append([home_player['player_name'][0], home_player_rating['overall_rating'][0]])
 	home_rating_sum += home_player_rating['overall_rating'][0]
 	away_lineup.append([away_player['player_name'][0], away_player_rating['overall_rating'][0]])
 	away_rating_sum += away_player_rating['overall_rating'][0]
 
 print(home_team + " lineup: " + str(home_lineup))
-print(away_team + " lineup: " + str(away_lineup))
+print(away_team + " lineup: " + str(away_lineup) + "\n")
 
 print("Overall Rating")
 print(home_team + ": " + str(home_rating_sum/11))
-print(away_team + ": " + str(away_rating_sum/11))
+print(away_team + ": " + str(away_rating_sum/11) + "\n")
+
+#########
+# Goals #
+#########
+
+match_goals_xml = ET.fromstring(match['goal'][0])
+for scorer in match_goals_xml.findall("value"):
+	player_name = pd.read_sql_query("select player_name from Player where player_api_id = "+ scorer.findall("player1")[0].text, conn)
+	if scorer.findall("team")[0].text == str(home_team_id):
+		home_scorers.append(player_name['player_name'][0])
+	else:
+		away_scorers.append(player_name['player_name'][0])
+
+print("Goals: ")
+print(home_team + ": " + str(home_scorers))
+print(away_team + ": " + str(away_scorers))
