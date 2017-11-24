@@ -6,17 +6,15 @@ import xml.etree.ElementTree as ET
 
 conn = sqlite3.connect('database.sqlite')
 
-if len(sys.argv) < 3:
+if len(sys.argv) < 4:
 	print("Lack of arguments")
 	sys.exit()
 else:
-	home_team, away_team = sys.argv[1], sys.argv[2]
+	home_team, away_team, season = sys.argv[1], sys.argv[2], sys.argv[3]
 
 # Variable Initialization
 home_lineup = []
 away_lineup = []
-home_scorers = []
-away_scorers = []
 home_rating_sum = 0
 away_rating_sum = 0
 
@@ -25,7 +23,7 @@ away_rating_sum = 0
 # Get team stats up to stage/round prior to the match
 
 def getTeamStats(initial_stage, final_stage):
-	matches_before_round = pd.read_sql_query("select * from Match where country_id = 1729 and league_id = 1729 and season = '2015/2016' and stage >= "+ str(initial_stage) +" and stage < "+ str(final_stage), conn)
+	matches_before_round = pd.read_sql_query("select * from Match where country_id = 1729 and league_id = 1729 and season = '"+str(int(season)-1)+"/"+season+"' and (home_team_api_id = "+ str(home_team_id) +" or home_team_api_id = "+ str(away_team_id) +" or away_team_api_id = "+ str(home_team_id) +" or away_team_api_id = "+ str(away_team_id) +") and stage >= "+ str(initial_stage) +" and stage < "+ str(final_stage), conn)
 	home_stats = {
 		'home_wins': 0,
 		'home_draws': 0,
@@ -40,6 +38,8 @@ def getTeamStats(initial_stage, final_stage):
 		'away_goals_scored': 0,
 		'away_goals_conceded': 0
 	}
+	home_scorers = {}
+	away_scorers = {}
 	for i in range(len(matches_before_round)):
 		if matches_before_round['home_team_api_id'][i] == home_team_id:
 			if matches_before_round['home_team_goal'][i] > matches_before_round['away_team_goal'][i]:
@@ -77,6 +77,32 @@ def getTeamStats(initial_stage, final_stage):
 				away_stats['away_losses'] += 1
 			away_stats['away_goals_scored'] += matches_before_round['away_team_goal'][i]
 			away_stats['away_goals_conceded'] += matches_before_round['home_team_goal'][i]
+		match_goals_xml = ET.fromstring(matches_before_round['goal'][i])
+		for scorer in match_goals_xml.findall("value"):
+			player_name = pd.read_sql_query("select player_name from Player where player_api_id = "+ scorer.findall("player1")[0].text, conn)
+			if scorer.findall("team")[0].text == str(home_team_id):
+				if len(player_name) != 0:
+					if player_name['player_name'][0] in home_scorers:
+						home_scorers[player_name['player_name'][0]] += 1
+					else:
+						home_scorers[player_name['player_name'][0]] = 1
+				else:
+					if 'Unknown Player' in home_scorers:
+						home_scorers['Unknown Player'] += 1
+					else:
+						home_scorers['Unknown Player'] = 1
+			elif scorer.findall("team")[0].text == str(away_team_id):
+				if len(player_name) != 0:
+					if player_name['player_name'][0] in away_scorers:
+						away_scorers[player_name['player_name'][0]] += 1
+					else:
+						away_scorers[player_name['player_name'][0]] = 1
+				else:
+					if 'Unknown Player' in away_scorers:
+						away_scorers['Unknown Player'] += 1
+					else:
+						away_scorers['Unknown Player'] = 1
+
 
 	home_points = home_stats['home_wins']*3+home_stats['home_draws']
 	away_points = away_stats['away_wins']*3+away_stats['away_draws']
@@ -96,7 +122,7 @@ def getTeamStats(initial_stage, final_stage):
 	print("Goals scored: " + str(away_stats['away_goals_scored']))
 	print("Goals conceded: " + str(away_stats['away_goals_conceded']) + "\n")
 
-	return([home_stats, away_stats])
+	return([home_stats, away_stats, home_scorers, away_scorers])
 
 ################################
 # League position of each team #
@@ -113,17 +139,19 @@ print(away_team + ": " + str(away_team_id) +"\n")
 
 # Step 2: Get match in question to get round
 match = pd.read_sql_query("select * from Match where home_team_api_id = "+ str(home_team_id) + " and away_team_api_id = "+ str(away_team_id)\
-	+ " and season = '2015/2016'", conn)
+	+ " and season = '"+str(int(season)-1)+"/"+season+"'", conn)
 match_round = match['stage'][0]
 match_year = str(match['date'][0][:4])
 
 # Step 3: Get team stats until that round
-getTeamStats(1, match_round)
+print("Team stats since round 1")
+team_stats_all_matches = getTeamStats(1, match_round)
 ####################
 # Last seven games #
 ####################
 
-getTeamStats(match_round-7, match_round)
+print("Team stats in the last seven matches")
+team_stats_last_seven = getTeamStats(match_round-7, match_round)
 
 #######################################################
 ## Attack/Defense efficiency - Function getTeamStats ##
@@ -162,14 +190,4 @@ print(away_team + ": " + str(away_rating_sum/11) + "\n")
 # Goals #
 #########
 
-match_goals_xml = ET.fromstring(match['goal'][0])
-for scorer in match_goals_xml.findall("value"):
-	player_name = pd.read_sql_query("select player_name from Player where player_api_id = "+ scorer.findall("player1")[0].text, conn)
-	if scorer.findall("team")[0].text == str(home_team_id):
-		home_scorers.append(player_name['player_name'][0])
-	else:
-		away_scorers.append(player_name['player_name'][0])
 
-print("Goals: ")
-print(home_team + ": " + str(home_scorers))
-print(away_team + ": " + str(away_scorers))
