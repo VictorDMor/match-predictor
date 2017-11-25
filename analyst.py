@@ -179,8 +179,18 @@ for i in range(1, 12):
 	away_lineup.append([away_player['player_name'][0], away_player_rating['overall_rating'][0]])
 	away_rating_sum += away_player_rating['overall_rating'][0]
 
-print(home_team + " lineup: " + str(home_lineup))
-print(away_team + " lineup: " + str(away_lineup) + "\n")
+print(home_team + " lineup: ")
+for i in range(len(home_lineup)):
+	if i == len(home_lineup)-1:
+		print(home_lineup[i][0] + " - " + str(home_lineup[i][1]) + "\n")
+	else:
+		print(home_lineup[i][0] + " - " + str(home_lineup[i][1]))
+print(away_team + " lineup: ")
+for i in range(len(away_lineup)):
+	if i == len(away_lineup)-1:
+		print(away_lineup[i][0] + " - " + str(away_lineup[i][1]) + "\n")
+	else:
+		print(away_lineup[i][0] + " - " + str(away_lineup[i][1]))
 
 print("Overall Rating")
 print(home_team + ": " + str(home_rating_sum/11))
