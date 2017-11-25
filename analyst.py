@@ -24,6 +24,9 @@ away_rating_sum = 0
 # Get team stats up to stage/round prior to the match
 
 def getTeamStats(initial_stage, final_stage):
+	#####################################################################################
+	## Points, wins, draws, losses and attack/defense efficiency Function getTeamStats ##
+	#####################################################################################
 	matches_before_round = pd.read_sql_query("select * from Match where country_id = 1729 and league_id = 1729 and season = '"+str(int(season)-1)+"/"+season+"' and (home_team_api_id = "+ str(home_team_id) +" or home_team_api_id = "+ str(away_team_id) +" or away_team_api_id = "+ str(home_team_id) +" or away_team_api_id = "+ str(away_team_id) +") and stage >= "+ str(initial_stage) +" and stage < "+ str(final_stage), conn)
 	home_stats = {
 		'home_wins': 0,
@@ -39,46 +42,95 @@ def getTeamStats(initial_stage, final_stage):
 		'away_goals_scored': 0,
 		'away_goals_conceded': 0
 	}
+	home_at_home_stats = {
+		'home_at_home_wins': 0,
+		'home_at_home_draws': 0,
+		'home_at_home_losses': 0,
+		'home_at_home_goals_scored': 0,
+		'home_at_home_goals_conceded': 0
+	}
+	home_at_away_stats = {
+		'home_at_away_wins': 0,
+		'home_at_away_draws': 0,
+		'home_at_away_losses': 0,
+		'home_at_away_goals_scored': 0,
+		'home_at_away_goals_conceded': 0
+	}
+	away_at_home_stats = {
+		'away_at_home_wins': 0,
+		'away_at_home_draws': 0,
+		'away_at_home_losses': 0,
+		'away_at_home_goals_scored': 0,
+		'away_at_home_goals_conceded': 0
+	}
+	away_at_away_stats = {
+		'away_at_away_wins': 0,
+		'away_at_away_draws': 0,
+		'away_at_away_losses': 0,
+		'away_at_away_goals_scored': 0,
+		'away_at_away_goals_conceded': 0
+	}
 	home_scorers = {}
 	away_scorers = {}
-	for i in range(len(matches_before_round)):
-		if matches_before_round['home_team_api_id'][i] == home_team_id:
+	for i in range(len(matches_before_round)): # Loops in all matches played by those teams in EPL before analysed match
+		if matches_before_round['home_team_api_id'][i] == home_team_id: # If home team of match analysed was home team in the ith match
 			if matches_before_round['home_team_goal'][i] > matches_before_round['away_team_goal'][i]:
 				home_stats['home_wins'] += 1
+				home_at_home_stats['home_at_home_wins'] += 1
 			elif matches_before_round['home_team_goal'][i] == matches_before_round['away_team_goal'][i]:
 				home_stats['home_draws'] += 1
+				home_at_home_stats['home_at_home_draws'] += 1
 			else:
 				home_stats['home_losses'] += 1
+				home_at_home_stats['home_at_home_losses'] += 1
 			home_stats['home_goals_scored'] += matches_before_round['home_team_goal'][i]
 			home_stats['home_goals_conceded'] += matches_before_round['away_team_goal'][i]
-		elif matches_before_round['away_team_api_id'][i] == home_team_id:
+			home_at_home_stats['home_at_home_goals_scored'] += matches_before_round['home_team_goal'][i]
+			home_at_home_stats['home_at_home_goals_conceded'] += matches_before_round['away_team_goal'][i]
+		elif matches_before_round['away_team_api_id'][i] == home_team_id: # If home team of match analysed was away team in the ith match
 			if matches_before_round['away_team_goal'][i] > matches_before_round['home_team_goal'][i]:
 				home_stats['home_wins'] += 1
+				home_at_away_stats['home_at_away_wins'] += 1
 			elif matches_before_round['away_team_goal'][i] == matches_before_round['home_team_goal'][i]:
 				home_stats['home_draws'] += 1
+				home_at_away_stats['home_at_away_draws'] += 1
 			else:
 				home_stats['home_losses'] += 1
+				home_at_away_stats['home_at_away_losses'] += 1
 			home_stats['home_goals_scored'] += matches_before_round['away_team_goal'][i]
 			home_stats['home_goals_conceded'] += matches_before_round['home_team_goal'][i]
-		if matches_before_round['home_team_api_id'][i] == away_team_id:
+			home_at_away_stats['home_at_away_goals_scored'] += matches_before_round['away_team_goal'][i]
+			home_at_away_stats['home_at_away_goals_conceded'] += matches_before_round['home_team_goal'][i]
+		if matches_before_round['home_team_api_id'][i] == away_team_id: # If away team of match analysed was home team in the ith match
 			if matches_before_round['home_team_goal'][i] > matches_before_round['away_team_goal'][i]:
 				away_stats['away_wins'] += 1
+				away_at_home_stats['away_at_home_wins'] += 1
 			elif matches_before_round['home_team_goal'][i] == matches_before_round['away_team_goal'][i]:
 				away_stats['away_draws'] += 1
+				away_at_home_stats['away_at_home_draws'] += 1
 			else:
 				away_stats['away_losses'] += 1
+				away_at_home_stats['away_at_home_losses'] += 1
 			away_stats['away_goals_scored'] += matches_before_round['home_team_goal'][i]
 			away_stats['away_goals_conceded'] += matches_before_round['away_team_goal'][i]
-		elif matches_before_round['away_team_api_id'][i] == away_team_id:
+			away_at_home_stats['away_at_home_goals_scored'] += matches_before_round['away_team_goal'][i]
+			away_at_home_stats['away_at_home_goals_conceded'] += matches_before_round['home_team_goal'][i]
+		elif matches_before_round['away_team_api_id'][i] == away_team_id: # If away team of match analysed was away team in the ith match
 			if matches_before_round['away_team_goal'][i] > matches_before_round['home_team_goal'][i]:
 				away_stats['away_wins'] += 1
+				away_at_away_stats['away_at_away_wins'] += 1
 			elif matches_before_round['away_team_goal'][i] == matches_before_round['home_team_goal'][i]:
 				away_stats['away_draws'] += 1
+				away_at_away_stats['away_at_away_draws'] += 1
 			else:
 				away_stats['away_losses'] += 1
+				away_at_away_stats['away_at_away_losses'] += 1
 			away_stats['away_goals_scored'] += matches_before_round['away_team_goal'][i]
 			away_stats['away_goals_conceded'] += matches_before_round['home_team_goal'][i]
-		match_goals_xml = ET.fromstring(matches_before_round['goal'][i])
+			away_at_away_stats['away_at_away_goals_scored'] += matches_before_round['away_team_goal'][i]
+			away_at_away_stats['away_at_away_goals_conceded'] += matches_before_round['home_team_goal'][i]
+
+		match_goals_xml = ET.fromstring(matches_before_round['goal'][i]) # Goalscorers of the ith match
 		for scorer in match_goals_xml.findall("value"):
 			if len(scorer.findall("player1")) != 0:
 				player_name = pd.read_sql_query("select player_name from Player where player_api_id = "+ scorer.findall("player1")[0].text, conn)
@@ -107,23 +159,66 @@ def getTeamStats(initial_stage, final_stage):
 
 
 	home_points = home_stats['home_wins']*3+home_stats['home_draws']
+	home_at_home_points = home_at_home_stats['home_at_home_wins']*3+home_at_home_stats['home_at_home_draws']
+	home_at_away_points = home_at_away_stats['home_at_away_wins']*3+home_at_away_stats['home_at_away_draws']
 	away_points = away_stats['away_wins']*3+away_stats['away_draws']
+	away_at_home_points = away_at_home_stats['away_at_home_wins']*3+away_at_home_stats['away_at_home_draws']
+	away_at_away_points = away_at_away_stats['away_at_away_wins']*3+away_at_away_stats['away_at_away_draws']
 
 	print(home_team + " stats:")
+	print("Overall:")
 	print("Wins: " + str(home_stats['home_wins']))
 	print("Draws: " + str(home_stats['home_draws']))
 	print("Losses: " + str(home_stats['home_losses']))
 	print("Points: " + str(home_points))
 	print("Goals scored: " + str(home_stats['home_goals_scored']))
 	print("Goals conceded: " + str(home_stats['home_goals_conceded']) + "\n")
+	print("At home:")
+	print("Wins: " + str(home_at_home_stats['home_at_home_wins']))
+	print("Draws: " + str(home_at_home_stats['home_at_home_draws']))
+	print("Losses: " + str(home_at_home_stats['home_at_home_losses']))
+	print("Points: " + str(home_at_home_points))
+	print("Goals scored: " + str(home_at_home_stats['home_at_home_goals_scored']))
+	print("Goals conceded: " + str(home_at_home_stats['home_at_home_goals_conceded']) + "\n")
+	print("Away:")
+	print("Wins: " + str(home_at_away_stats['home_at_away_wins']))
+	print("Draws: " + str(home_at_away_stats['home_at_away_draws']))
+	print("Losses: " + str(home_at_away_stats['home_at_away_losses']))
+	print("Points: " + str(home_at_away_points))
+	print("Goals scored: " + str(home_at_away_stats['home_at_away_goals_scored']))
+	print("Goals conceded: " + str(home_at_away_stats['home_at_away_goals_conceded']) + "\n")
 	print(away_team + " stats:")
+	print("Overall:")
 	print("Wins: " + str(away_stats['away_wins']))
 	print("Draws: " + str(away_stats['away_draws']))
 	print("Losses: " + str(away_stats['away_losses']))
 	print("Points: " + str(away_points))
 	print("Goals scored: " + str(away_stats['away_goals_scored']))
 	print("Goals conceded: " + str(away_stats['away_goals_conceded']) + "\n")
+	print("At home:")
+	print("Wins: " + str(away_at_home_stats['away_at_home_wins']))
+	print("Draws: " + str(away_at_home_stats['away_at_home_draws']))
+	print("Losses: " + str(away_at_home_stats['away_at_home_losses']))
+	print("Points: " + str(away_at_home_points))
+	print("Goals scored: " + str(away_at_home_stats['away_at_home_goals_scored']))
+	print("Goals conceded: " + str(away_at_home_stats['away_at_home_goals_conceded']) + "\n")
+	print("Away:")
+	print("Wins: " + str(away_at_away_stats['away_at_away_wins']))
+	print("Draws: " + str(away_at_away_stats['away_at_away_draws']))
+	print("Losses: " + str(away_at_away_stats['away_at_away_losses']))
+	print("Points: " + str(away_at_away_points))
+	print("Goals scored: " + str(away_at_away_stats['away_at_away_goals_scored']))
+	print("Goals conceded: " + str(away_at_away_stats['away_at_away_goals_conceded']) + "\n")
 
+	home_goalscorers = sorted(home_scorers.items(), key=operator.itemgetter(1), reverse=True)
+	away_goalscorers = sorted(away_scorers.items(), key=operator.itemgetter(1), reverse=True)
+	print(home_team + " goalscorers: ")
+	for i in home_goalscorers:
+		print(i[0] + " - " + str(i[1]))
+	print("\n" + away_team + " goalscorers: ")
+	for j in away_goalscorers:
+		print(j[0] + " - " + str(j[1]))
+	print("\n")
 	return([home_stats, away_stats, home_scorers, away_scorers])
 
 ################################
@@ -154,10 +249,6 @@ team_stats_all_matches = getTeamStats(1, match_round)
 
 print("Team stats in the last seven matches")
 team_stats_last_seven = getTeamStats(match_round-7, match_round)
-
-#######################################################
-## Attack/Defense efficiency - Function getTeamStats ##
-#######################################################
 
 ###############################
 # Line-ups and Rating Average #
@@ -202,11 +293,4 @@ print(away_team + ": " + str(away_rating_sum/11) + "\n")
 # Goalscorers #
 ###############
 
-home_goalscorers = sorted(team_stats_all_matches[2].items(), key=operator.itemgetter(1), reverse=True)
-away_goalscorers = sorted(team_stats_all_matches[3].items(), key=operator.itemgetter(1), reverse=True)
-print(home_team + " goalscorers: ")
-for i in home_goalscorers:
-	print(i[0] + " - " + str(i[1]))
-print("\n" + away_team + " goalscorers: ")
-for j in away_goalscorers:
-	print(j[0] + " - " + str(j[1]))
+
