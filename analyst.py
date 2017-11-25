@@ -3,6 +3,7 @@ import sys
 import pandas as pd
 import sqlite3
 import xml.etree.ElementTree as ET
+import operator
 
 conn = sqlite3.connect('database.sqlite')
 
@@ -79,29 +80,30 @@ def getTeamStats(initial_stage, final_stage):
 			away_stats['away_goals_conceded'] += matches_before_round['home_team_goal'][i]
 		match_goals_xml = ET.fromstring(matches_before_round['goal'][i])
 		for scorer in match_goals_xml.findall("value"):
-			player_name = pd.read_sql_query("select player_name from Player where player_api_id = "+ scorer.findall("player1")[0].text, conn)
-			if scorer.findall("team")[0].text == str(home_team_id):
-				if len(player_name) != 0:
-					if player_name['player_name'][0] in home_scorers:
-						home_scorers[player_name['player_name'][0]] += 1
+			if len(scorer.findall("player1")) != 0:
+				player_name = pd.read_sql_query("select player_name from Player where player_api_id = "+ scorer.findall("player1")[0].text, conn)
+				if scorer.findall("team")[0].text == str(home_team_id):
+					if len(player_name) != 0:
+						if player_name['player_name'][0] in home_scorers:
+							home_scorers[player_name['player_name'][0]] += 1
+						else:
+							home_scorers[player_name['player_name'][0]] = 1
 					else:
-						home_scorers[player_name['player_name'][0]] = 1
-				else:
-					if 'Unknown Player' in home_scorers:
-						home_scorers['Unknown Player'] += 1
+						if 'Unknown Player' in home_scorers:
+							home_scorers['Unknown Player'] += 1
+						else:
+							home_scorers['Unknown Player'] = 1
+				elif scorer.findall("team")[0].text == str(away_team_id):
+					if len(player_name) != 0:
+						if player_name['player_name'][0] in away_scorers:
+							away_scorers[player_name['player_name'][0]] += 1
+						else:
+							away_scorers[player_name['player_name'][0]] = 1
 					else:
-						home_scorers['Unknown Player'] = 1
-			elif scorer.findall("team")[0].text == str(away_team_id):
-				if len(player_name) != 0:
-					if player_name['player_name'][0] in away_scorers:
-						away_scorers[player_name['player_name'][0]] += 1
-					else:
-						away_scorers[player_name['player_name'][0]] = 1
-				else:
-					if 'Unknown Player' in away_scorers:
-						away_scorers['Unknown Player'] += 1
-					else:
-						away_scorers['Unknown Player'] = 1
+						if 'Unknown Player' in away_scorers:
+							away_scorers['Unknown Player'] += 1
+						else:
+							away_scorers['Unknown Player'] = 1
 
 
 	home_points = home_stats['home_wins']*3+home_stats['home_draws']
@@ -196,8 +198,15 @@ print("Overall Rating")
 print(home_team + ": " + str(home_rating_sum/11))
 print(away_team + ": " + str(away_rating_sum/11) + "\n")
 
-#########
-# Goals #
-#########
+###############
+# Goalscorers #
+###############
 
-
+home_goalscorers = sorted(team_stats_all_matches[2].items(), key=operator.itemgetter(1), reverse=True)
+away_goalscorers = sorted(team_stats_all_matches[3].items(), key=operator.itemgetter(1), reverse=True)
+print(home_team + " goalscorers: ")
+for i in home_goalscorers:
+	print(i[0] + " - " + str(i[1]))
+print("\n" + away_team + " goalscorers: ")
+for j in away_goalscorers:
+	print(j[0] + " - " + str(j[1]))
