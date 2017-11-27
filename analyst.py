@@ -4,8 +4,13 @@ import pandas as pd
 import sqlite3
 import xml.etree.ElementTree as ET
 import operator
+import os
+import csv
 
 conn = sqlite3.connect('database.sqlite')
+
+os.remove("xs.csv")
+os.remove("ys.csv")
 
 if len(sys.argv) < 4:
 	print("Lack of arguments")
@@ -20,6 +25,15 @@ else:
 ##       y > 1 = Home victory             ## 
 ##       y < -1 = Away victory            ##
 ############################################
+x = []
+y = []
+xs = open('xs.csv', 'w')
+ys = open('ys.csv', 'w')
+w_home = 1
+w_points = 1
+w_last_seven_points = 1
+w_overall = 1
+bias = 1
 
 # Useful functions
 
@@ -232,7 +246,7 @@ def NetworkTraining():
 	hits = 0
 	misses = 0
 	for i in range(len(matches)):
-		if i % 200 == 0:
+		if i % 3039 == 0:
 			print("Hits: " + str(hits))
 			print("Misses: " + str(misses))
 			if i != 0:
@@ -251,6 +265,8 @@ def NetworkTraining():
 			hits += 1
 		else:
 			misses += 1
+
+		y.append(match_hh)
 	return hits, misses
 
 def HeadToHead(home_team, away_team, season, training=True):
@@ -258,7 +274,7 @@ def HeadToHead(home_team, away_team, season, training=True):
 	away_rating_sum = 0
 	home_lineup = []
 	away_lineup = []
-	head_to_head = [1]
+	head_to_head = [1*w_home]
 	################################
 	# League position of each team #
 	################################
@@ -346,9 +362,9 @@ def HeadToHead(home_team, away_team, season, training=True):
 	away_points = team_stats_all_matches[5]
 
 	if home_points > away_points:
-		head_to_head.append(1)
+		head_to_head.append(1*w_home)
 	elif home_points < away_points:
-		head_to_head.append(-1)
+		head_to_head.append(-1*w_home)
 	else:
 		head_to_head.append(0)
 
@@ -357,9 +373,9 @@ def HeadToHead(home_team, away_team, season, training=True):
 	away_points_last_seven = team_stats_last_seven[5]
 
 	if home_points_last_seven > away_points_last_seven:
-		head_to_head.append(1)
+		head_to_head.append(1*w_last_seven_points)
 	elif home_points_last_seven < away_points_last_seven:
-		head_to_head.append(-1)
+		head_to_head.append(-1*w_last_seven_points)
 	else:
 		head_to_head.append(0)
 
@@ -368,13 +384,14 @@ def HeadToHead(home_team, away_team, season, training=True):
 	away_overall_rating = away_rating_sum/len(away_players)
 
 	if home_overall_rating > away_overall_rating:
-		head_to_head.append(1)
+		head_to_head.append(1*w_overall)
 	elif home_overall_rating < away_overall_rating:
-		head_to_head.append(-1)
+		head_to_head.append(-1*w_overall)
 	else:
 		head_to_head.append(0)
-
-	return sum(head_to_head)
+	if training:
+		x.append(head_to_head)
+	return sum(head_to_head)+bias
 
 winner = HeadToHead(home_team, away_team, season, False)
 if winner >= 1:
@@ -385,3 +402,17 @@ else:
 	print("The match will end as a draw! \n")
 
 hits, misses = NetworkTraining()
+
+with open('xs.csv', 'w') as xs:
+	writer = csv.writer(xs)
+	for i in x:
+		writer.writerow(i)
+
+with open('ys.csv', 'w') as ys:
+	writer = csv.writer(ys)
+	for i in y:
+		writer.writerow(i)
+
+print("Hits: " + str(hits))
+print("Misses: " + str(misses))
+print("Accuracy: " + str((float(hits)/float(hits+misses))*100))
