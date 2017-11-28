@@ -194,51 +194,6 @@ def getTeamStats(home_team_id, away_team_id, initial_stage, final_stage, season,
 	away_at_home_points = away_at_home_stats['away_at_home_wins']*3+away_at_home_stats['away_at_home_draws']
 	away_at_away_points = away_at_away_stats['away_at_away_wins']*3+away_at_away_stats['away_at_away_draws']
 
-	# print(home_team + " stats:")
-	# print("Overall:")
-	# print("Wins: " + str(home_stats['home_wins']))
-	# print("Draws: " + str(home_stats['home_draws']))
-	# print("Losses: " + str(home_stats['home_losses']))
-	# print("Points: " + str(home_points))
-	# print("Goals scored: " + str(home_stats['home_goals_scored']))
-	# print("Goals conceded: " + str(home_stats['home_goals_conceded']) + "\n")
-	# print("At home:")
-	# print("Wins: " + str(home_at_home_stats['home_at_home_wins']))
-	# print("Draws: " + str(home_at_home_stats['home_at_home_draws']))
-	# print("Losses: " + str(home_at_home_stats['home_at_home_losses']))
-	# print("Points: " + str(home_at_home_points))
-	# print("Goals scored: " + str(home_at_home_stats['home_at_home_goals_scored']))
-	# print("Goals conceded: " + str(home_at_home_stats['home_at_home_goals_conceded']) + "\n")
-	# print("Away:")
-	# print("Wins: " + str(home_at_away_stats['home_at_away_wins']))
-	# print("Draws: " + str(home_at_away_stats['home_at_away_draws']))
-	# print("Losses: " + str(home_at_away_stats['home_at_away_losses']))
-	# print("Points: " + str(home_at_away_points))
-	# print("Goals scored: " + str(home_at_away_stats['home_at_away_goals_scored']))
-	# print("Goals conceded: " + str(home_at_away_stats['home_at_away_goals_conceded']) + "\n")
-	# print(away_team + " stats:")
-	# print("Overall:")
-	# print("Wins: " + str(away_stats['away_wins']))
-	# print("Draws: " + str(away_stats['away_draws']))
-	# print("Losses: " + str(away_stats['away_losses']))
-	# print("Points: " + str(away_points))
-	# print("Goals scored: " + str(away_stats['away_goals_scored']))
-	# print("Goals conceded: " + str(away_stats['away_goals_conceded']) + "\n")
-	# print("At home:")
-	# print("Wins: " + str(away_at_home_stats['away_at_home_wins']))
-	# print("Draws: " + str(away_at_home_stats['away_at_home_draws']))
-	# print("Losses: " + str(away_at_home_stats['away_at_home_losses']))
-	# print("Points: " + str(away_at_home_points))
-	# print("Goals scored: " + str(away_at_home_stats['away_at_home_goals_scored']))
-	# print("Goals conceded: " + str(away_at_home_stats['away_at_home_goals_conceded']) + "\n")
-	# print("Away:")
-	# print("Wins: " + str(away_at_away_stats['away_at_away_wins']))
-	# print("Draws: " + str(away_at_away_stats['away_at_away_draws']))
-	# print("Losses: " + str(away_at_away_stats['away_at_away_losses']))
-	# print("Points: " + str(away_at_away_points))
-	# print("Goals scored: " + str(away_at_away_stats['away_at_away_goals_scored']))
-	# print("Goals conceded: " + str(away_at_away_stats['away_at_away_goals_conceded']) + "\n")
-
 	return([home_stats, away_stats, home_scorers, away_scorers, home_points, away_points])
 
 def NetworkTraining():
@@ -246,7 +201,7 @@ def NetworkTraining():
 	hits = 0
 	misses = 0
 	for i in range(len(matches)):
-		if i % 3039 == 0:
+		if i % 1 == 0:
 			print("Hits: " + str(hits))
 			print("Misses: " + str(misses))
 			if i != 0:
