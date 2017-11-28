@@ -3,22 +3,24 @@
 % -----------------------------------------------------------------------------
 
 
-\section{Desenvolvimento}\label{sec:desenvolvimento}	% edite para alterar o título da seção
+\section{Desenvolvimento}\label{sec:desenvolvimento}
 
+Antes de se desenvolver o código da solução para o problema proposto, é preciso entender os desafios que acompanham este problema. São eles: 
+\noindent\textbf{(1)} Encontrar um volume de dados suficiente para o aprendizado 
+\noindent\textbf{(2)} Como transformar e modelar esses dados de forma a se transformar numa entrada plausível para o modelo matemático? 
+\noindent\textbf{(3)} Qual o melhor algoritmo de aprendizado para a predição?
 
-Caso seja conveniente, podem ser criadas outras seções para o desenvolvimento do artigo. No entanto, as seções de introdução e conclusão são obrigatórias.
+\subsection{Primeiro desafio}
 
-Para desmembrar esta seção em quantas forem necessárias/convenientes, copie este arquivo, renomeie-o e lembre-se de editar o arquivo "meuArtigo.tex" para incluir os arquivos criados para cada nova seção.
+Para o primeiro desafio, é preciso frisar que todos os tipos de problemas que são resolvidos com aprendizado de máquina supervisionado devem ter um conjunto de dados de treinamento de tamanho satisfatório com o objetivo de cobrir todas as possibilidades e saídas, assim permitindo que o algoritmo 'conheça' todo o escopo do problema e possa gerar saídas com grande nível de precisão.
 
-Organize o seu artigo científico da maneira mais conveniente para o leitor do trabalho. É para ele que você escreve.
+No tocante à predição de resultados de partidas de futebol isso não é diferente. É necessário uma grande base de dados que contenha o histórico de milhares de partidas de futebol de  várias temporadas. Por isso, foram estudados diversos conjuntos de dados e foi selecionado o conjunto de dados chamado 'European Soccer Database', que contém uma amostra de 25 mil partidas da principal liga de onze países da Europa entre os anos de 2008 e 2016.
 
-Normalmente, esta seção "Desenvolvimento" não é utilizada na prática. Pode ser mais adequado substituí-la por três seções: "Fundamentação teórica", "Experimentos", "Análise e discussão dos resultados", ou outra organização de texto que o autor julgue mais vantajosa.
+Mais detalhadamente falando, essa base de dados possui informações sobre jogos de futebol, jogadores, equipes, países, campeonatos e habilidades técnicas de jogadores. Trata-se de um conjunto de dados bastante completo e apto a ser usado para a modelagem do problema proposto.
 
-Qualquer que seja a organização escolhida, o que não pode faltar de forma alguma no corpo do texto descritivo de seu trabalho de pesquisa é o "quê" você fez de fato, em detalhes suficientes para que um outro pesquisador possa compreender.
+\subsection{Segundo desafio}
 
-Também não pode faltar a metodologia, ou seja, "como" você fez o trabalho, bem detalhado para que outros possam reproduzir seus experimentos ou ensaios ou seja lá o que foi feito e que possa obter os mesmos resultados que você obteve. Isso significa que todas as condições iniciais e de contorno, bem como todos os valores de variáveis devem estar indicados no texto. Faz parte da metodologia de pesquisa apresentar e discutir como os dados são analisados, se fez um tratamento estatístico neles ou não, e porquê. Finalmente, você deve apresentar seus resultados de maneira clara e objetiva, usando e abusando de gráficos e tabelas para facilitar a compreensão do leitor.
-
-Uma questão que sempre surge é se é mais adequado apresentar "todos" os resultados primeiro e "depois" discute-los, ou se seria mais conveniente organizar os resultados em "blocos" que seriam apresentados e discutidos  bloco a bloco. A resposta é: isto fica a critério do autor do trabalho. O essencial é que fique compreensível ara o leitor do trabalho. 
+Com a base de dados em mãos, foi necessário um estudo sobre como preparar os dados de entrada das amostras para servirem de dados de entrada para o algoritmo de aprendizado. A primeira decisão tomada foi a de não usar 100\% dessas amostras, uma vez que em cada um dos onze países contidos na base de dados as influências no resultado de um jogo e até mesmo a maneira de praticar o esporte é diferente. Ou seja, há variáveis que influenciam mais do que outras no resultado de uma partida em um determinado campeonato, e essas variáveis podem influenciar menos em detrimento de outras em outra liga de outro país.
 
 
 % -----------------------------------------------------------------------------
