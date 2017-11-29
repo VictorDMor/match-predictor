@@ -20,109 +20,89 @@ Mais detalhadamente falando, essa base de dados possui informações sobre jogos
 
 \subsection{Segundo desafio}
 
-Com a base de dados em mãos, foi necessário um estudo sobre como preparar os dados de entrada das amostras para servirem de dados de entrada para o algoritmo de aprendizado. A primeira decisão tomada foi a de não usar 100\% dessas amostras, uma vez que em cada um dos onze países contidos na base de dados as influências no resultado de um jogo e até mesmo a maneira de praticar o esporte é diferente. Ou seja, há variáveis que influenciam mais do que outras no resultado de uma partida em um determinado campeonato, e essas variáveis podem influenciar menos em detrimento de outras em outra liga de outro país.
+Com a base de dados em mãos, foi necessário um estudo sobre como preparar os dados de entrada das amostras para servirem de dados de entrada para o algoritmo de aprendizado. A primeira decisão tomada foi a de não usar 100\% dessas amostras, uma vez que em cada um dos onze países contidos na base de dados as influênc\subsection{Próximos passos}ias no resultado de um jogo e até mesmo a maneira de praticar o esporte é diferente. Ou seja, há variáveis que influenciam mais do que outras no resultado de uma partida em um determinado campeonato, e essas variáveis podem influenciar menos em detrimento de outras em outra liga de outro país.
+
+Por isso, decidiu-se por usar as amostras apenas de uma liga em particular, a 'Premier League', a primeira divisão do campeonato inglês de futebol. Essa liga foi escolhida por além de ser uma das mais famosas do mundo, é a liga que tem o nível de detalhe mais rico no que diz respeito à qualidade dos dados extraídos. Ademais, a 'Premier League' é a liga que mais movimenta dinheiro no mundo, dando um total de 400 milhões de libras esterlinas, o equivalente a 1,7 bilhões de reais em premiação para as equipes, além de ser a liga que mais movimenta dinheiro em direitos de transmissão e transferência de jogadores.
+
+Finalmente, foram escolhidas para treinamento um total de 3.040 amostras, ou seja, 3.040 jogos de futebol do campeonato inglês entre os anos de 2008 e 2016. Após, foi preciso uma nova análise desses dados para decidir como o modelo matemático de previsão do resultado das partidas seria construído.
+
+Para a previsão em si, um sistema de influências foi criado. Para efeitos de simplificação, foram escolhidas apenas quatro fatores que podem influenciar o resultado de um jogo:
+
+\textbf{(1)} Mando de campo
+
+\textbf{(2)} Pontuação da equipe no campeonato desde o início até a rodada a qual a partida será realizada
+
+\textbf{(3)} Pontuação da equipe no campeonato nos últimos sete jogos
+
+\textbf{(4)} Média quantificada das habilidades do time titular de cada equipe
 
 
-% -----------------------------------------------------------------------------
-% Nova subseção
-% -----------------------------------------------------------------------------
+É importante mencionar que todas os fatores têm a mesma importância, ou seja, implicitamente falando todos os fatores tem peso 1.
 
-\subsection{Figura ocupando uma coluna}		% edite para alterar o título da subseção
+Decidiu-se em cada fator comparar as equipes entre si e, após a comparação, a cada fator é atribuido um valor, avaliado em:
 
-A \textbf{Figura \ref{fig:patoA}} foi inserida, em uma única coluna, utilizando os comandos abaixo.
+\textbf{(a)} 1, em caso de vitória do mandante no fator
 
-\begin{center}
-  \captionof{figure}{Pato na lagoa. Fator de escala: 8\% da original} 
-  \includegraphics[scale=0.08]{./02-figuras/pato}
-  \label{fig:patoA}
-\end{center}
+\textbf{(b)} -1, em caso de vitória do visitante no fator
 
-Artigos como mais de duas colunas não suportam o ambiente "figure" utilizado neste modelo \LaTeX. Uma alternativa para este problema é a inclusão do pacote:
-
-{\tiny
-\begin{verbatim}
-    \usepackage{caption}
-\end{verbatim}
-}
-
-e das seguintes linhas de comando:
-
-{\tiny
-\begin{verbatim}
-    \begin{center}
-      \captionof{figure}{<caption da figura>} 
-      \includegraphics[<comandos alternativos>]
-      		{<caminho ou nome da figura>}
-      \label{<nome da referencia da figura>}
-    \end{center}
-\end{verbatim}
-}
+\textbf{(c)} 0, em caso de empate no fator
 
 
+Assim, o resultado da partida é previsto após a soma dos valores de cada fator, semelhante às mesmas regras listadas acima, caso a soma dos valores seja
 
-% -----------------------------------------------------------------------------
-% Nova subseção
-% -----------------------------------------------------------------------------
+\textbf{(a)} maior ou igual a 1, vitória do time mandante
 
-\subsection{Figura ocupando duas colunas} 		% edite para alterar o título da subseção
+\textbf{(b)} menor ou igual a -1, vitória do time visitante
 
-O ambiente \verb+figure+ pode ser usado em um artigo quando a figura for centralizada entre as margens do artigo (ocupa um espaço maior que uma coluna). Porém é necessário a introdução do \verb+*+ após o comando \verb+figure+.
+\textbf{(c)} 0, empate
 
-\begin{figure*}
-	\centering
-	\caption{Pato na lagoa. Fator de escala: 20\% da original} 
-	\includegraphics[scale=0.2]{./02-figuras/pato}
-	\label{fig:patoB}
-\end{figure*}
+\subsection{Construção do algoritmo}
+O objetivo final é que o algoritmo receba uma partida do campeonato inglês como parâmetro de entrada, este parâmetro é subdividido em três parâmetros: 'nome do time da casa', 'nome do time visitante', 'ano em que a partida é realizada'.
 
-A \textbf{Figura \ref{fig:patoB}} foi inserida no artigo utilizando o comando \verb+figure*+ para o ambiente de figura.
+Com isso, o algoritmo busca a rodada da liga pertence esta partida, além de calcular dados pertinentes a cada uma das equipes, como pontuação, jogadores que iniciarão aquela partida como titulares, número de gols marcados, número de gols sofridos e a média quantificada da habilidade técnica desses jogadores titulares.
+
+Após a extração desses dados, estes são colocados em análise com o objetivo de se calcular os fatores listados na subseção acima e, assim, gerar a previsão do resultado do jogo.
+
+Tecnicamente falando, optou-se por usar a linguagem de programação Python com a biblioteca Pandas para o tratamento dos dados e a comunicação com a base de dados, que foi criada usando a linguagem de banco de dados SQL e permite visualização pelo script Python através da biblioteca SQLite.
+
+O script criado, chamado de Analyst, recebe por parâmetro em linha de comando os dados descritos acima, sua execução é feita por:
 
 {\tiny
-\begin{verbatim}
-   \begin{figure*}
-     \centering
-     \caption{Pato na lagoa. Fator de escala: 20\% da original} 
-     \includegraphics[scale=0.2]{./02-figuras/pato}
-     \label{fig:patoB}
-   \end{figure*}
-\end{verbatim}
+	python analyst.py <mandante> <visitante> <ano>
 }
 
+Quando executado, o script se conecta com a base de dados pela biblioteca SQLite, extrai os dados da base de dados tomando como referência as informações obtidas por linha de comando usando o Pandas, os converte em tipos de variável primários, faz os cálculos pertinentes explicados anteriormente e retorna para o usuário uma mensagem indicando qual será o resultado da partida (em inglês). 
 
+\subsection{Treinamento e precisão da predição}
 
-% -----------------------------------------------------------------------------
-% Nova subseção
-% -----------------------------------------------------------------------------
+Após prever o resultado da partida, o algoritmo reexecuta todos os passos N vezes, sendo N o tamanho da amostra, ou seja, agora o modelo é executado para todas as partidas da amostra. Porém, dessa vez o resultado da previsão é comparado com o resultado real da partida (1 para vitória do mandante, -1 para vitória do visitante e 0 para o empate) e, em caso de igualdade, é contabilizado um acerto para o algoritmo, caso contrário, é contabilizado um erro para o algoritmo. A precisão é calculada como a soma dos acertos dividida pelo número de amostras.
 
-\subsection{Tabelas} 		% edite para alterar o título da subseção
+\subsection{Resultados e terceiro desafio}
 
-O ambiente de tabelas é inserido no texto de modo análogo àquele feito no ambiente de figuras.
+Para o caso explanado acima, onde todos os fatores/variáveis têm a mesma influência sob o resultado final, sem quaisquer tipo de aprendizado supervisionado, foi obtida uma precisão na ordem de 42,23\% sob as 3.040 amostras comparadas. Portanto, é fortemente recomendado o uso de um algoritmo de aprendizado de máquina supervisionado onde o desafio final torna-se ajustar as influências (ou pesos) de cada variável para que haja um aumento no número de acertos da solução proposta e, consequentemente, um aumento na precisão. Afinal de contas, trata-se de um espelho da realidade, pois de fato alguns fatores são mais preponderantes no resultado final de uma partida do que outros, por isso é fundamental o uso de aprendizado de máquina, ou \textit{Machine Learning}.
 
+Na visão de aprendizado de máquina, conclui-se que prever os resultados de uma partida de futebol trata-se de um problema de classificação, onde as partidas devem ser classificadas em vitória do mandante, vitória do visitante ou empate. Por isso, três algoritmos são propostos para treinar os pesos:
+\\
 
+\textbf{(1)} Redes Neurais Recorrentes
+\textbf{(2)} Supporting Vector Machines (SVM)
+\textbf{(3)} Regressão Logística
 
+A escolha do melhor algoritmo a ser usado depende diretamente de como os dados são modelados. Algumas aplicações interessantes podem ser utilizadas a partir desse modelo. Como por exemplo a otimização de esforços em determinadas áreas por parte de um time de futebol. Por exemplo, se em um país A o modelo após treinamento detectou uma influência maior do mando de campo nas vitórias do time da casa, é possível concentrar recursos na melhoria do estádio desse time. Ou em um país B onde a eficácia defensiva é fundamental nos resultados positivos de uma equipe, é possível criar uma formação tática ou estratégia que tenha ênfase na defesa.
 
-% -----------------------------------------------------------------------------
-% Nova subseção
-% -----------------------------------------------------------------------------
+\subsection{Próximos passos}
 
-\subsection{Citações de referências} 		% edite para alterar o título da subseção
+Além da efetiva implementação de um algoritmo de treinamento no modelo proposto, várias outras melhorias podem ser efetuadas visando um aumento na precisão da solução, como por exemplo:
 
-As referências são inseridas no texto como em qualquer documento em \LaTeX. Quando o nome do autor da referência faz parte do texto que você está escrevendo use o comando  \verb+\citeonline{}+ e quando este não for o caso use o comando \verb+\cite{}+. Veja a diferença entre os dois nas seguintes frases:
+\textbf{(1)} Uso de mais fatores, como entrosamento da equipe
+\textbf{(2)} Melhor modelagem dos atributos dos jogadores
+\textbf{(3)} Análise de sensibilidade usando sistemas Fuzzy
 
-\noindent\textbf{(1)} Conforme discute \citeonline{kim1996} o resultado [...].
+Tudo isso, combinado, traria importante crescimento no desenvolvimento do modelo de negócio e, após, em resultados positivos.
 
-\noindent\textbf{(2)} Alternativamente a literatura\cite{kim1996} indica que o resultado [...].
+\subsection{Conclusão}
 
-Quando se tem mais de uma referência a ser citada em um mesmo certo trecho, há duas possibilidades de referenciá-las:
+Prever resultados de futebol é só uma simples aplicação de métodos matemáticos e aprendizado de máquina e que torna fácil o entendimento da teoria que cerca esses dois assuntos. É impossível alcançar a perfeição nas predições, uma vez que o fator humano envolvido nos resultados das partidas é ainda impossível de se modelar. Além disso, um algoritmo hipotético que acertasse 100\% das previsões tiraria aquela que é a motivação em se acompanhar esportes, que é a emoção envolvida acerca da confiança em um resultado positivo da sua equipe que o torcedor.
 
-\noindent\textbf{(1)} colocar todas as referências em um único colchete (\emph{i.e.}, num mesmo comando \verb+\cite+),
-
-
-\cite{kim1996,Wikibooks2009}
-
-	
-\noindent\textbf{(2)} colocar cada referência em seu próprio colchete (\emph{i.e.}, usando vários comandos \verb+\cite+ consecutivos),
-
-
-\cite{kim1996}\cite{Wikibooks2009}
+Sendo o fator humano tão importante até mesmo para a rentabilidade do futebol no meio profissional, existem certas fronteiras as quais, por uma questão ética, a Inteligência Artificial deve ser impedida de alcançar a perfeição, e prever resultados do esporte mais amado do planeta com 100\% de acertos é certamente uma dessas fronteiras.
 

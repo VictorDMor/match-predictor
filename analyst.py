@@ -201,11 +201,6 @@ def NetworkTraining():
 	hits = 0
 	misses = 0
 	for i in range(len(matches)):
-		if i % 1 == 0:
-			print("Hits: " + str(hits))
-			print("Misses: " + str(misses))
-			if i != 0:
-				print("Accuracy: " + str((float(hits)/float(hits+misses))*100))
 		home_team = pd.read_sql_query("select * from Team where team_api_id = " + str(matches['home_team_api_id'][i]), conn)['team_long_name'][0]
 		away_team = pd.read_sql_query("select * from Team where team_api_id = " + str(matches['away_team_api_id'][i]), conn)['team_long_name'][0]
 		match_hh = []

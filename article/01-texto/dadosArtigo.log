@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.11.28)  28 NOV 2017 17:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.10.29)  28 NOV 2017 22:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **dadosArtigo.tex
 (./dadosArtigo.tex
 LaTeX2e <2016/02/01>
-Babel <3.9q> and hyphenation patterns for 5 language(s) loaded.
+Babel <3.9q> and hyphenation patterns for 81 language(s) loaded.
 ! Undefined control sequence.
 l.10 \tituloA
              {Predição de resultados de futebol com Machine Learning}
@@ -266,11 +266,11 @@ Missing character: There is no m in font nullfont!
 
  
 Here is how much of TeX's memory you used:
- 5 strings out of 494910
- 150 string characters out of 6179835
- 45442 words of memory out of 5000000
- 3397 multiletter control sequences out of 15000+600000
+ 5 strings out of 493029
+ 150 string characters out of 6136233
+ 53070 words of memory out of 5000000
+ 3641 multiletter control sequences out of 15000+600000
  3640 words of font info for 14 fonts, out of 8000000 for 9000
- 36 hyphenation exceptions out of 8191
+ 1141 hyphenation exceptions out of 8191
  5i,0n,4p,154b,16s stack positions out of 5000i,500n,10000p,200000b,80000s
 !  ==> Fatal error occurred, no output PDF file produced!

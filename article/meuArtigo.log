@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.11.28)  28 NOV 2017 17:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.10.29)  28 NOV 2017 23:46
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **meuArtigo.tex
 (./meuArtigo.tex
 LaTeX2e <2016/02/01>
-Babel <3.9q> and hyphenation patterns for 5 language(s) loaded.
+Babel <3.9q> and hyphenation patterns for 81 language(s) loaded.
 (./abntex2.cls
 Document Class: abntex2 2015/04/28 v1.9.5 abnTeX2
 (/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
@@ -23,8 +23,10 @@ ment class
 Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
 Package ifpdf Info: pdfTeX in PDF mode is detected.
 )
-Class memoir Info: An `ifetex' package is being emulated on input line 265.
+(/usr/share/texlive/texmf-dist/tex/latex/ifetex/ifetex.sty
+Package: ifetex 2011/12/15 v1.2 ifetex
 
+(/usr/share/texlive/texmf-dist/tex/plain/ifetex/ifetex.tex))
 (/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
@@ -314,7 +316,6 @@ Package delarray [2008/07/23] emulated by memoir.
 Package enumerate [2008/07/23] emulated by memoir.
 Package epigraph [2008/07/23] emulated by memoir.
 Package ifmtarg [2008/07/23] emulated by memoir.
-Package ifetex [2008/07/23] emulated by memoir.
 Package index [2008/07/23] emulated by memoir.
 Package makeidx [2008/07/23] emulated by memoir.
 Package moreverb [2008/07/23] emulated by memoir.
@@ -487,22 +488,12 @@ File: babel.def 2016/02/24 3.9q Babel common definitions
 \l@australian = a dialect from \language\l@british 
 \l@newzealand = a dialect from \language\l@british 
 )
-
-! Package babel Error: Unknown option `brazil'. Either you misspelled it
-(babel)                or the language definition file brazil.ldf was not found
-.
-
-See the babel package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.310 \ProcessOptions*
-                      
-Valid options are: shorthands=, KeepShorthandsActive,
-activeacute, activegrave, noconfigs, safe=, main=, math=
-headfoot=, strings=, config=, hyphenmap=, or a language name.
-
-) (/usr/share/texlive/texmf-dist/tex/latex/enumitem/enumitem.sty
+(/usr/share/texlive/texmf-dist/tex/generic/babel-portuges/portuges.ldf
+Language: portuges 2008/03/18 v1.2q Portuguese support from the babel system
+\l@brazil = a dialect from \language\l@portuges 
+Package babel Info: Making " an active character on input line 145.
+))
+(/usr/share/texlive/texmf-dist/tex/latex/enumitem/enumitem.sty
 Package: enumitem 2011/09/28 v3.5.2 Customized lists
 \labelindent=\skip186
 \enit@outerparindent=\dimen152
@@ -1581,57 +1572,44 @@ Package microtype Info: Character `029' is missing
 x.map}
 
 
-]
+] [2]
+Underfull \hbox (badness 2181) in paragraph at lines 84--86
+[]\T1/lmr/m/n/10 (+20) Na vi-são de apren-di-zado de má-quina,
+ []
 
-Package caption Warning: The option `hypcap=true' will be ignored for this
-(caption)                particular \caption on input line 35.
-See the caption package documentation for explanation.
 
-<./02-figuras/pato.jpg, id=28, 1606.0pt x 1204.5pt>
-File: ./02-figuras/pato.jpg Graphic file (type jpg)
+Underfull \hbox (badness 1430) in paragraph at lines 84--86
+\T1/lmr/m/n/10 (+20) de clas-si-fi-ca-ção, onde as par-ti-das de-vem
+ []
 
-<use ./02-figuras/pato.jpg>
-Package pdftex.def Info: ./02-figuras/pato.jpg used on input line 36.
-(pdftex.def)             Requested size: 128.48262pt x 96.36197pt.
-LaTeX Font Info:    Try loading font information for T1+lmtt on input line 43.
- (/usr/share/texmf/tex/latex/lm/t1lmtt.fd
-File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-Package microtype Info: Loading generic settings for font family
-(microtype)             `lmtt' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-File: ./02-figuras/pato.jpg Graphic file (type jpg)
 
-<use ./02-figuras/pato.jpg>
-Package pdftex.def Info: ./02-figuras/pato.jpg used on input line 74.
-(pdftex.def)             Requested size: 321.19432pt x 240.89574pt.
- [2 <./02-figuras/pato.jpg>])
-(./01-texto/conclusao.tex) (./01-texto/agradecimentos.tex)
-(./01-texto/abstract.tex) (./04-referencias/referencias.tex (./meuArtigo.bbl
-bibitemlist
-[3])) [4
+Underfull \hbox (badness 1019) in paragraph at lines 84--86
+\T1/lmr/m/n/10 (+20) ser clas-si-fi-ca-das em vi-tó-ria do man-dante,
+ []
 
-]
+
+Underfull \hbox (badness 10000) in paragraph at lines 84--86
+
+ []
+
+[3]) (./01-texto/conclusao.tex) (./01-texto/agradecimentos.tex)
+(./01-texto/abstract.tex) (./04-referencias/referencias.tex) [4]
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 180.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 180.
- (./meuArtigo.aux)
+
+(./meuArtigo.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 180.
 Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 180.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 180.
  ) 
 Here is how much of TeX's memory you used:
- 24862 strings out of 494910
- 433853 string characters out of 6179835
- 577569 words of memory out of 5000000
- 27602 multiletter control sequences out of 15000+600000
- 72646 words of font info for 95 fonts, out of 8000000 for 9000
- 36 hyphenation exceptions out of 8191
- 60i,12n,54p,976b,588s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 24842 strings out of 493029
+ 433781 string characters out of 6136233
+ 583458 words of memory out of 5000000
+ 27818 multiletter control sequences out of 15000+600000
+ 72623 words of font info for 101 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 60i,12n,54p,976b,356s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
 ips/lm/lm-rm.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx10.pfb></usr/share
 /texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm
@@ -1640,12 +1618,11 @@ f/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf/fonts/type1/public/lm/lmr5.
 pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share/texmf/fonts/ty
 pe1/public/lm/lmr7.pfb></usr/share/texmf/fonts/type1/public/lm/lmr9.pfb></usr/s
 hare/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fonts/type1/publi
-c/lm/lmri9.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt10.pfb></usr/share/t
-exmf/fonts/type1/public/lm/lmtt8.pfb>
-Output written on meuArtigo.pdf (4 pages, 442502 bytes).
+c/lm/lmri9.pfb>
+Output written on meuArtigo.pdf (4 pages, 265467 bytes).
 PDF statistics:
- 163 PDF objects out of 1000 (max. 8388607)
- 141 compressed objects within 2 object streams
- 23 named destinations out of 1000 (max. 500000)
- 26226 words of extra memory for PDF output out of 29859 (max. 10000000)
+ 129 PDF objects out of 1000 (max. 8388607)
+ 110 compressed objects within 2 object streams
+ 18 named destinations out of 1000 (max. 500000)
+ 25197 words of extra memory for PDF output out of 29859 (max. 10000000)
 
