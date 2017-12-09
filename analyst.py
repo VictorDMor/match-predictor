@@ -40,63 +40,33 @@ bias = 1
 ### Get team stats up to stage/round prior to the match
 
 def getTeamStats(home_team_id, away_team_id, initial_stage, final_stage, season, training=True):
-	home_stats = {
-		'home_wins': 0,
-		'home_draws': 0,
-		'home_losses': 0,
-		'home_goals_scored': 0,
-		'home_goals_conceded': 0
-	}
-	away_stats = {
-		'away_wins': 0,
-		'away_draws': 0,
-		'away_losses': 0,
-		'away_goals_scored': 0,
-		'away_goals_conceded': 0
-	}
-	home_at_home_stats = {
-		'home_at_home_wins': 0,
-		'home_at_home_draws': 0,
-		'home_at_home_losses': 0,
-		'home_at_home_goals_scored': 0,
-		'home_at_home_goals_conceded': 0
-	}
-	home_at_away_stats = {
-		'home_at_away_wins': 0,
-		'home_at_away_draws': 0,
-		'home_at_away_losses': 0,
-		'home_at_away_goals_scored': 0,
-		'home_at_away_goals_conceded': 0
-	}
-	away_at_home_stats = {
-		'away_at_home_wins': 0,
-		'away_at_home_draws': 0,
-		'away_at_home_losses': 0,
-		'away_at_home_goals_scored': 0,
-		'away_at_home_goals_conceded': 0
-	}
-	away_at_away_stats = {
-		'away_at_away_wins': 0,
-		'away_at_away_draws': 0,
-		'away_at_away_losses': 0,
-		'away_at_away_goals_scored': 0,
-		'away_at_away_goals_conceded': 0
-	}
+	home_stats = { 'home_wins': 0, 'home_draws': 0, 'home_losses': 0, 'home_goals_scored': 0, 'home_goals_conceded': 0 }
+	away_stats = { 'away_wins': 0, 'away_draws': 0, 'away_losses': 0, 'away_goals_scored': 0, 'away_goals_conceded': 0 }
+	home_at_home_stats = { 'home_at_home_wins': 0, 'home_at_home_draws': 0, 'home_at_home_losses': 0, 'home_at_home_goals_scored': 0, 'home_at_home_goals_conceded': 0 }
+	home_at_away_stats = { 'home_at_away_wins': 0, 'home_at_away_draws': 0, 'home_at_away_losses': 0, 'home_at_away_goals_scored': 0, 'home_at_away_goals_conceded': 0 }
+	away_at_home_stats = { 'away_at_home_wins': 0, 'away_at_home_draws': 0, 'away_at_home_losses': 0, 'away_at_home_goals_scored': 0, 'away_at_home_goals_conceded': 0 }
+	away_at_away_stats = { 'away_at_away_wins': 0, 'away_at_away_draws': 0, 'away_at_away_losses': 0, 'away_at_away_goals_scored': 0, 'away_at_away_goals_conceded': 0 }
 
 	#####################################################################################
 	## Points, wins, draws, losses and attack/defense efficiency Function getTeamStats ##
 	#####################################################################################
-	home_team = pd.read_sql_query("select * from Team where team_api_id = " + str(home_team_id), conn)['team_long_name'][0]
-	away_team = pd.read_sql_query("select * from Team where team_api_id = " + str(away_team_id), conn)['team_long_name'][0]
+	teams_info = pd.read_sql_query("select team_long_name from Team where team_api_id in (" + str(home_team_id) + ", " + str(away_team_id) + ")", conn)
+	home_team, away_team = teams_info["team_long_name"][0], teams_info["team_long_name"][1]
 
 	home_scorers = {}
 	away_scorers = {}
 
 	if final_stage > 1:
 		if not training:
-			matches_before_round = pd.read_sql_query("select * from Match where country_id = 1729 and league_id = 1729 and season = '"+str(int(season)-1)+"/"+season+"' and (home_team_api_id = "+ str(home_team_id) +" or home_team_api_id = "+ str(away_team_id) +" or away_team_api_id = "+ str(home_team_id) +" or away_team_api_id = "+ str(away_team_id) +") and stage >= "+ str(initial_stage) +" and stage < "+ str(final_stage), conn)
+			matches_before_round = pd.read_sql_query("select home_team_api_id, home_team_goal, away_team_api_id, away_team_goal, goal from Match " \
+				"where country_id = 1729 and league_id = 1729 and season = '"+str(int(season)-1)+"/"+season+"' " \
+				"and (home_team_api_id in ("+ str(home_team_id) +", "+ str(away_team_id) +") or away_team_api_id in ("+ str(home_team_id) +", "+ str(away_team_id) +")) " \
+				"and stage between "+ str(initial_stage) +" and "+ str(final_stage), conn)
 		else:
-			matches_before_round = pd.read_sql_query("select * from Match where country_id = 1729 and league_id = 1729 and season = '"+ season +"' and (home_team_api_id = "+ str(home_team_id) +" or home_team_api_id = "+ str(away_team_id) +" or away_team_api_id = "+ str(home_team_id) +" or away_team_api_id = "+ str(away_team_id) +") and stage >= "+ str(initial_stage) +" and stage < "+ str(final_stage), conn)
+			matches_before_round = pd.read_sql_query("select home_team_api_id, home_team_goal, away_team_api_id, away_team_goal, goal from Match " \
+				"where country_id = 1729 and league_id = 1729 and season = '"+ season +"' " \
+				"and (home_team_api_id in ("+ str(home_team_id) +", "+ str(away_team_id) +") or away_team_api_id in ("+ str(home_team_id) +", "+ str(away_team_id) +")) " \
+				"and stage between "+ str(initial_stage) +" and "+ str(final_stage), conn)
 
 		for i in range(len(matches_before_round)): # Loops in all matches played by those teams in EPL before analysed match
 			if matches_before_round['home_team_api_id'][i] == home_team_id: # If home team of match analysed was home team in the ith match
@@ -197,12 +167,12 @@ def getTeamStats(home_team_id, away_team_id, initial_stage, final_stage, season,
 	return([home_stats, away_stats, home_scorers, away_scorers, home_points, away_points])
 
 def NetworkTraining():
-	matches = pd.read_sql_query("select * from Match where country_id = 1729 and league_id = 1729", conn)
+	matches = pd.read_sql_query("select home_team_api_id, away_team_api_id, home_team_goal, away_team_goal, season from Match where country_id = 1729 and league_id = 1729", conn)
 	hits = 0
 	misses = 0
 	for i in range(len(matches)):
-		home_team = pd.read_sql_query("select * from Team where team_api_id = " + str(matches['home_team_api_id'][i]), conn)['team_long_name'][0]
-		away_team = pd.read_sql_query("select * from Team where team_api_id = " + str(matches['away_team_api_id'][i]), conn)['team_long_name'][0]
+		team_names = pd.read_sql_query("select team_long_name from Team where team_api_id in (" + str(matches['home_team_api_id'][i]) + ", " + str(matches['away_team_api_id'][i]) + ")", conn)
+		home_team, away_team = team_names['team_long_name'][0], team_names['team_long_name'][1]
 		match_hh = []
 		predicted_winner = HeadToHead(home_team, away_team, str(matches['season'][i]))
 		if matches['home_team_goal'][i] > matches['away_team_goal'][i]:
@@ -215,6 +185,11 @@ def NetworkTraining():
 			hits += 1
 		else:
 			misses += 1
+
+		if i % 1 == 0:
+			print("Hits: " + str(hits))
+			print("Misses: " + str(misses))
+			print("Accuracy: " + str((float(hits)/float(hits+misses))*100))
 
 		y.append(match_hh)
 	return hits, misses
@@ -231,8 +206,7 @@ def HeadToHead(home_team, away_team, season, training=True):
 
 	# Step 1: Get Team IDs
 	teams_id = pd.read_sql_query("select team_api_id from Team where team_long_name like '" + home_team + "%' or team_long_name like '" + away_team + "%'", conn)
-	home_team_id = teams_id['team_api_id'][0]
-	away_team_id = teams_id['team_api_id'][1]
+	home_team_id, away_team_id = teams_id['team_api_id'][0], teams_id['team_api_id'][1]
 
 	# Step 2: Get match in question to get round
 	if not training:
