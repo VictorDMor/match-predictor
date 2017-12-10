@@ -1,0 +1,129 @@
+Results with 5 features and without bias:
+Hits: 0                                                                                                                 
+Misses: 1                                                                                                               
+Accuracy: 0.0                                                                                                           
+
+Hits: 45                                                                                                                
+Misses: 56                                                                                                              
+Accuracy: 44.554455445544555                                                                                            
+
+Hits: 88                                                                                                                
+Misses: 113                                                                                                             
+Accuracy: 43.78109452736319                                                                                             
+
+Hits: 130                                                                                                               
+Misses: 171                                                                                                             
+Accuracy: 43.18936877076412                                                                                             
+
+Hits: 169                                                                                                               
+Misses: 232                                                                                                             
+Accuracy: 42.14463840399002                                                                                             
+
+Hits: 217                                                                                                               
+Misses: 284                                                                                                             
+Accuracy: 43.31337325349301                                                                                             
+
+Hits: 260                                                                                                               
+Misses: 341                                                                                                             
+Accuracy: 43.261231281198                                                                                               
+
+Hits: 299                                                                                                               
+Misses: 402                                                                                                             
+Accuracy: 42.65335235378031                                                                                             
+
+Hits: 344                                                                                                               
+Misses: 457                                                                                                             
+Accuracy: 42.94631710362047                                                                                             
+
+Hits: 396                                                                                                               
+Misses: 505                                                                                                             
+Accuracy: 43.951165371809104                                                                                            
+
+Hits: 443                                                                                                               
+Misses: 558                                                                                                             
+Accuracy: 44.255744255744254                                                                                            
+
+Hits: 488                                                                                                               
+Misses: 613                                                                                                             
+Accuracy: 44.323342415985465                                                                                            
+
+Hits: 522                                                                                                               
+Misses: 679                                                                                                             
+Accuracy: 43.46378018318068                                                                                             
+
+Hits: 558                                                                                                               
+Misses: 743                                                                                                             
+Accuracy: 42.89008455034589                                                                                             
+
+Hits: 606                                                                                                               
+Misses: 795                                                                                                             
+Accuracy: 43.25481798715203                                                                                             
+
+Hits: 650                                                                                                               
+Misses: 851                                                                                                             
+Accuracy: 43.30446369087275                                                                                             
+
+Hits: 693                                                                                                               
+Misses: 908                                                                                                             
+Accuracy: 43.28544659587757                                                                                             
+
+Hits: 736                                                                                                               
+Misses: 965                                                                                                             
+Accuracy: 43.26866549088771                                                                                             
+
+Hits: 784                                                                                                               
+Misses: 1017                                                                                                            
+Accuracy: 43.53137146029983                                                                                             
+
+Hits: 827                                                                                                               
+Misses: 1074                                                                                                            
+Accuracy: 43.503419253024724                                                                                            
+
+Hits: 871                                                                                                               
+Misses: 1130                                                                                                            
+Accuracy: 43.52823588205897                                                                                             
+
+Hits: 920                                                                                                               
+Misses: 1181                                                                                                            
+Accuracy: 43.78867206092337                                                                                             
+
+Hits: 973                                                                                                               
+Misses: 1228                                                                                                            
+Accuracy: 44.207178555202184                                                                                            
+
+Hits: 1013                                                                                                              
+Misses: 1288                                                                                                            
+Accuracy: 44.024337244676225                                                                                            
+
+Hits: 1053                                                                                                              
+Misses: 1348                                                                                                            
+Accuracy: 43.85672636401499                                                                                             
+
+Hits: 1098                                                                                                              
+Misses: 1403                                                                                                            
+Accuracy: 43.90243902439025                                                                                             
+
+Hits: 1143                                                                                                              
+Misses: 1458                                                                                                            
+Accuracy: 43.944636678200695                                                                                            
+
+Hits: 1182                                                                                                              
+Misses: 1519                                                                                                            
+Accuracy: 43.761569788967044                                                                                            
+
+Hits: 1218                                                                                                              
+Misses: 1583                                                                                                            
+Accuracy: 43.484469832202784                                                                                            
+
+Hits: 1251                                                                                                              
+Misses: 1650                                                                                                            
+Accuracy: 43.12306101344364                                                                                             
+
+Hits: 1297                                                                                                              
+Misses: 1704                                                                                                            
+Accuracy: 43.218927024325225                                                                                            
+
+Hits: 1311                                                                                                              
+Misses: 1729                                                                                                            
+Accuracy: 4
+3.125

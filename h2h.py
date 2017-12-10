@@ -14,9 +14,10 @@ w_home = 1
 w_points = 1
 w_last_seven_points = 1
 w_overall = 1
-bias = 1
+w_betting = 1
+bias = 0
 
-def HeadToHead(home_team, away_team, season, training=True):
+def HeadToHead(season, training=True, home_team='', away_team='', home_team_id=0, away_team_id=0):
 	conn = sqlite3.connect('database.sqlite')
 	home_rating_sum = 0
 	away_rating_sum = 0
@@ -27,12 +28,10 @@ def HeadToHead(home_team, away_team, season, training=True):
 	# League position of each team #
 	################################
 
-	# Step 1: Get Team IDs
-	teams_id = pd.read_sql_query("select team_api_id from Team where team_long_name like '" + home_team + "%' or team_long_name like '" + away_team + "%'", conn)
-	home_team_id, away_team_id = teams_id['team_api_id'][0], teams_id['team_api_id'][1]
-
 	# Step 2: Get match in question to get round
 	if not training:
+		teams_id = pd.read_sql_query("select team_api_id from Team where team_long_name like '" + home_team + "%' or team_long_name like '" + away_team + "%'", conn)
+		home_team_id, away_team_id = teams_id['team_api_id'][0], teams_id['team_api_id'][1]
 		match = pd.read_sql_query("select * from Match where home_team_api_id = "+ str(home_team_id) + " and away_team_api_id = "+ str(away_team_id)\
 			+ " and season = '"+str(int(season)-1)+"/"+season+"'", conn)
 	else:
@@ -136,6 +135,12 @@ def HeadToHead(home_team, away_team, season, training=True):
 		head_to_head.append(-1*w_overall)
 	else:
 		head_to_head.append(0)
+
+	if min(match['B365H'][0], match['B365D'][0], match['B365A'][0]) == match['B365H'][0]:
+		head_to_head.append(1*w_betting)
+	elif min(match['B365H'][0], match['B365D'][0], match['B365A'][0]) == match['B365A'][0]:
+		head_to_head.append(-1*w_betting)
+
 	if training:
 		return sum(head_to_head)+bias, head_to_head
 	else:

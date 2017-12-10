@@ -10,10 +10,9 @@ def NetworkTraining():
 	x = []
 	y = []
 	for i in range(len(matches)):
-		team_names = pd.read_sql_query("select team_long_name from Team where team_api_id in (" + str(matches['home_team_api_id'][i]) + ", " + str(matches['away_team_api_id'][i]) + ")", conn)
-		home_team, away_team = team_names['team_long_name'][0], team_names['team_long_name'][1]
+		home_team, away_team = matches['home_team_api_id'][i], matches['away_team_api_id'][i]
 		match_hh = []
-		predicted_winner, match_x = HeadToHead(home_team, away_team, str(matches['season'][i]))
+		predicted_winner, match_x = HeadToHead(str(matches['season'][i]), True, '', '', home_team, away_team)
 		if matches['home_team_goal'][i] > matches['away_team_goal'][i]:
 			match_hh.append(1)
 		elif matches['home_team_goal'][i] < matches['away_team_goal'][i]:

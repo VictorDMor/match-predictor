@@ -11,6 +11,7 @@ def getTeamStats(home_team_id, away_team_id, initial_stage, final_stage, season,
 	home_at_away_stats = { 'home_at_away_wins': 0, 'home_at_away_draws': 0, 'home_at_away_losses': 0, 'home_at_away_goals_scored': 0, 'home_at_away_goals_conceded': 0 }
 	away_at_home_stats = { 'away_at_home_wins': 0, 'away_at_home_draws': 0, 'away_at_home_losses': 0, 'away_at_home_goals_scored': 0, 'away_at_home_goals_conceded': 0 }
 	away_at_away_stats = { 'away_at_away_wins': 0, 'away_at_away_draws': 0, 'away_at_away_losses': 0, 'away_at_away_goals_scored': 0, 'away_at_away_goals_conceded': 0 }
+	winner_by_betting = 0
 
 	#####################################################################################
 	## Points, wins, draws, losses and attack/defense efficiency Function getTeamStats ##
@@ -23,12 +24,12 @@ def getTeamStats(home_team_id, away_team_id, initial_stage, final_stage, season,
 
 	if final_stage > 1:
 		if not training:
-			matches_before_round = pd.read_sql_query("select home_team_api_id, home_team_goal, away_team_api_id, away_team_goal, goal from Match " \
+			matches_before_round = pd.read_sql_query("select home_team_api_id, home_team_goal, away_team_api_id, away_team_goal, goal, B365H, B365D, B365A from Match " \
 				"where country_id = 1729 and league_id = 1729 and season = '"+str(int(season)-1)+"/"+season+"' " \
 				"and (home_team_api_id in ("+ str(home_team_id) +", "+ str(away_team_id) +") or away_team_api_id in ("+ str(home_team_id) +", "+ str(away_team_id) +")) " \
 				"and stage between "+ str(initial_stage) +" and "+ str(final_stage), conn)
 		else:
-			matches_before_round = pd.read_sql_query("select home_team_api_id, home_team_goal, away_team_api_id, away_team_goal, goal from Match " \
+			matches_before_round = pd.read_sql_query("select home_team_api_id, home_team_goal, away_team_api_id, away_team_goal, goal, B365H, B365D, B365A from Match " \
 				"where country_id = 1729 and league_id = 1729 and season = '"+ season +"' " \
 				"and (home_team_api_id in ("+ str(home_team_id) +", "+ str(away_team_id) +") or away_team_api_id in ("+ str(home_team_id) +", "+ str(away_team_id) +")) " \
 				"and stage between "+ str(initial_stage) +" and "+ str(final_stage), conn)

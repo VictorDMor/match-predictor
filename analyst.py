@@ -17,7 +17,7 @@ else:
 xs = open('xs.csv', 'w')
 ys = open('ys.csv', 'w')
 
-winner = HeadToHead(home_team, away_team, season, False)
+winner = HeadToHead(season, False, home_team, away_team)
 if winner >= 1:
 	print("Winner will be: " + home_team + "\n")
 elif winner < 0:
