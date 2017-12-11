@@ -24,7 +24,7 @@ def NetworkTraining():
 		else:
 			misses += 1
 
-		if i % 1 == 0:
+		if i % 1000 == 0:
 			print("Hits: " + str(hits))
 			print("Misses: " + str(misses))
 			print("Accuracy: " + str((float(hits)/float(hits+misses))*100))

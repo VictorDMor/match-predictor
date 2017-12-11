@@ -1,0 +1,19 @@
+Hits: 0                                                                                                                 
+Misses: 1                                                                                                               
+Accuracy: 0.0                                                                                                           
+
+Hits: 575                                                                                                               
+Misses: 426                                                                                                             
+Accuracy: 57.442557442557444                                                                                            
+
+Hits: 1143                                                                                                              
+Misses: 858                                                                                                             
+Accuracy: 57.12143928035982                                                                                             
+
+Hits: 1712                                                                                                              
+Misses: 1289                                                                                                            
+Accuracy: 57.047650783072314                                                                                            
+
+Hits: 1734                                                                                                              
+Misses: 1306                                                                                                            
+Accuracy: 57.03947368421053  						

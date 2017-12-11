@@ -15,7 +15,7 @@ w_points = 1
 w_last_seven_points = 1
 w_overall = 1
 w_betting = 1
-bias = 0
+bias = -1
 
 def HeadToHead(season, training=True, home_team='', away_team='', home_team_id=0, away_team_id=0):
 	conn = sqlite3.connect('database.sqlite')
